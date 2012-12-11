@@ -1,0 +1,13 @@
+/*
+!/.bashrc
+!/.bash_functions
+!/.gitignore
+!/.tmux.conf
+!/.vim
+!/.vimrc
+!/.xbindkeysrc
+!/.xinitrc
+!/.Xresources
+!/.config
+/.config/*
+!/.config/awesome/
