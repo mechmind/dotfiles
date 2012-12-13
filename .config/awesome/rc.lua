@@ -119,6 +119,9 @@ kbdwidget = widget({type = "textbox", name = "kbdwidget"})
 kbdwidget.border_width = 1
 kbdwidget.text = " us "
 
+kbdwidget:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () awful.util.spawn("xkb-switch -n", false) end) ))
+
 dbus.request_name("session", "ru.gentoo.kbdd")
 dbus.add_match("session", "interface='ru.gentoo.kbdd',member='layoutChanged'")
 dbus.add_signal("ru.gentoo.kbdd", function(...)
@@ -147,6 +150,11 @@ volwidget.widget:buttons(awful.util.table.join(
     awful.button({ }, 4, function () awful.util.spawn_with_shell("amixer -c 0 set Master 4+ unmute") end),
     awful.button({ }, 5, function () awful.util.spawn_with_shell("amixer -c 0 set Master 4-") end)
 ))
+
+---- VPN widget
+vpnwidget = widget({type = "textbox", name = "vpnwidget"})
+vpnwidget.text = ""
+
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -224,6 +232,7 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
+        vpnwidget,
         volwidget.widget,
         kbdwidget,
         s == 1 and mysystray or nil,
