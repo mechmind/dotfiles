@@ -10,6 +10,8 @@ require("naughty")
 vicious = require("vicious")
 -- Scratchpad drop-down app lib
 scratch = require("scratch")
+-- Jumpback
+jumpback = require("jumpback")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -27,7 +29,7 @@ do
         -- Make sure we don't go into an endless error loop
         if in_error then return end
         in_error = true
-
+	print(err)
         naughty.notify({ preset = naughty.config.presets.critical,
                          title = "Oops, an error happened!",
                          text = err })
@@ -274,6 +276,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey,           }, "`", jumpback.jumpback),
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
