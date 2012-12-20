@@ -1,5 +1,5 @@
 local data = { last = nil }
-local capi = { client = client }
+local capi = { client = client, mouse = mouse }
 local tag = require("awful.tag")
 
 -- cloned from awful.client.urgent.jumpto
@@ -28,7 +28,13 @@ function jumpback()
     end
 end
 
-capi.client.add_signal("unfocus", function(c) data.last = c end)
+function drop(c)
+    if (c == data.last) then
+        data.last = nil
+    end
+end
 
+capi.client.add_signal("unfocus", function(c) data.last = c end)
+capi.client.add_signal("unmanage", drop)
 api = { jumpback = jumpback }
 return api
