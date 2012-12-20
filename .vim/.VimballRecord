@@ -1,2 +1,0 @@
-NrrwRgn-0.29.vmb: call delete('/home/mechmind/.vim/plugin/NrrwRgn.vim')|call delete('/home/mechmind/.vim/autoload/nrrwrgn.vim')|call delete('/home/mechmind/.vim/doc/NarrowRegion.txt')
-utl_3_0a.vba: call delete('/home/mechmind/.vim/doc/utl_usr.txt')|call delete('/home/mechmind/.vim/autoload/utl_lib.vim')|call delete('/home/mechmind/.vim/plugin/utl.vim')|call delete('/home/mechmind/.vim/plugin/utl_rc.vim')|call delete('/home/mechmind/.vim/plugin/utl_scm.vim')|call delete('/home/mechmind/.vim/plugin/utl_uri.vim')

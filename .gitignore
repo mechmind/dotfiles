@@ -11,3 +11,5 @@
 !/.config
 /.config/*
 !/.config/awesome/
+/.vim/.VimballRecord
+/.vim/.netrwhist
