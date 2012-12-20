@@ -46,6 +46,7 @@ beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 terminal = "urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
+scratch_cmd = terminal .. " -e ensure-tmux"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -271,7 +272,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
@@ -279,6 +279,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey,           }, "q", function () awful.screen.focus(2) end),
+    awful.key({ modkey,           }, "w", function () awful.screen.focus(1) end),
     awful.key({ modkey,           }, "`", jumpback.jumpback),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -321,7 +323,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "x", function () awful.util.spawn("mpc next", false) end),
 
     -- Dropdown respawning terminal
-    awful.key({ "Mod1" }, "`", function () scratch.drop(terminal, "top", "center", 1, 0.7) end)
+    awful.key({ "Mod1" }, "`", function () scratch.drop(scratch_cmd, "top", "center", 1, 0.7) end)
 )
 
 clientkeys = awful.util.table.join(
