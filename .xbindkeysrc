@@ -54,14 +54,27 @@
 "xvkbd -xsendevent -text "\[Alt]\[Right]""
    b:7
 
-"pgrep glmatrix || xlaunch /usr/lib/xscreensaver/glmatrix -fog -waves -no-rotate -root"
-   XF86Sleep
+#"pgrep glmatrix || xlaunch /usr/lib/xscreensaver/glmatrix -fog -waves -no-rotate -root"
+#   XF86Sleep
    
 #"pgrep glmatrix || xlaunch /usr/lib/xscreensaver/glmatrix -fog -waves -no-rotate -root -speed 1"
 #   control + alt + del
    
-"killall glmatrix  && xvkbd -xsendevent -text "\[Ctrl]\[Alt]\[F7]""
-  control + XF86Sleep
+#"killall glmatrix  && xvkbd -xsendevent -text "\[Ctrl]\[Alt]\[F7]""
+#    control + XF86Sleep
+
+#"xvkbd -xsendevent -text "\[Left]""
+#    Menu + a
+#
+#"xvkbd -xsendevent -text "\[Up]""
+#    Menu + d
+#
+#"xvkbd -xsendevent -text "\[Down]""
+#    Menu + s
+#
+#"xvkbd -xsendevent -text "\[Right]""
+#    Menu + f
+#
 #"xterm -geom 50x20+20+20"
 #   Shift+Mod2+alt + s
 #
@@ -80,12 +93,3 @@
 ##################################
 # End of xbindkeys configuration #
 ##################################
-
-
-# DF shortcuts
-
-#"xvkbd -xsendevent -text 'd \[Left] \[Left] \[Return] \[Return]'"
-#   Control + Alt + Mod2 + Left
-
-#"xvkbd -xsendevent -text 'd \[Right] \[Right] \[Return] \[Return]'"
-#   Control + Alt + Mod2 + Right
