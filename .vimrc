@@ -26,3 +26,6 @@ let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 let g:pymode_lint_write = 0
 let g:pymode_folding = 0
 
+" nerdtree settings
+map <C-m> :NERDTreeToggle<CR>
+
