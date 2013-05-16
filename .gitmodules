@@ -16,3 +16,6 @@
 [submodule ".vim/bundle/gocode"]
 	path = .vim/bundle/gocode
 	url = https://github.com/nsf/gocode.git
+[submodule ".vim/bundle/nerdcommenter"]
+	path = .vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
