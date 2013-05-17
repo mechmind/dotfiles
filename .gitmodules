@@ -10,9 +10,6 @@
 [submodule ".vim/bundle/supertab"]
 	path = .vim/bundle/supertab
 	url = https://github.com/ervandew/supertab.git
-[submodule ".vim/bundle/go-vim"]
-	path = .vim/bundle/go-vim
-	url = https://github.com/uggedal/go-vim.git
 [submodule ".vim/bundle/gocode"]
 	path = .vim/bundle/gocode
 	url = https://github.com/nsf/gocode.git
