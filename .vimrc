@@ -20,6 +20,8 @@ set wildmode=longest:full
 " tabs
 map <F9> :tabprev<CR>
 map <F10> :tabnext<CR>
+imap <F9> <C-C>:tabprev<CR>
+imap <F10> <C-C>:tabnext<CR>
 
 " pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
