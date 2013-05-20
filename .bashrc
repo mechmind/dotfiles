@@ -11,3 +11,4 @@ PS1='[\u@\[\e[0;'$PS1_hostcolor'm\]\h\[\e[0m\] \w]\$ '
 complete -cf sudo
 
 source ~/.bash_functions
+
