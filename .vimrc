@@ -8,9 +8,18 @@ filetype indent on
 
 highlight lCursor guifg=NONE guibg=Cyan
 
+" identation with spaces
 set tabstop=4
 set shiftwidth=4
 set expandtab
+
+" wildmenu
+set wildmenu
+set wildmode=longest:full
+
+" tabs
+map <F9> :tabprev<CR>
+map <F10> :tabnext<CR>
 
 " pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
