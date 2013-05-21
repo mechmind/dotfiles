@@ -7,6 +7,7 @@ filetype plugin on
 filetype indent on
 
 highlight lCursor guifg=NONE guibg=Cyan
+colorscheme peachpuff
 
 " identation with spaces
 set tabstop=4
