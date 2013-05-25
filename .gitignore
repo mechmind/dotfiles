@@ -4,6 +4,8 @@
 !/.gitignore
 !/.tmux.conf
 !/.vim
+/.vim/.VimballRecord
+/.vim/.netrwhist
 !/.vimrc
 !/.xbindkeysrc
 !/.xinitrc
@@ -11,5 +13,6 @@
 !/.config
 /.config/*
 !/.config/awesome/
-/.vim/.VimballRecord
-/.vim/.netrwhist
+!/.config/i3
+!/.config/i3status
+!/.config/dunst
