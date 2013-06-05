@@ -183,6 +183,9 @@ bindsym XF86AudioMute exec amixer -c 0 set Master toggle
 bindsym XF86AudioLowerVolume exec amixer -c 0 set Master 4-
 bindsym XF86AudioRaiseVolume exec amixer -c 0 set Master 4+ unmute
 
+# locker
+bindsym Control+Mod1+l exec slock
+
 # second monitor workspaces
 workspace q output DVI-0
 workspace w output DVI-0
