@@ -46,3 +46,5 @@ let g:pymode_folding = 0
 " nerdtree settings
 map <C-m> :NERDTreeToggle<CR>
 
+" markdown settings
+autocmd FileType markdown set textwidth=80
