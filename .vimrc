@@ -46,3 +46,5 @@ let g:pymode_folding = 0
 " nerdtree settings
 map <C-m> :NERDTreeToggle<CR>
 
+" session control
+set sessionoptions=buffers,curdir,folds,tabpages
