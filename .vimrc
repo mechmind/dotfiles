@@ -48,3 +48,6 @@ map <C-m> :NERDTreeToggle<CR>
 
 " session control
 set sessionoptions=buffers,curdir,folds,tabpages
+
+" markdown settings
+autocmd FileType markdown set textwidth=80
