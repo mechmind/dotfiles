@@ -17,8 +17,7 @@ set shiftwidth=4
 set expandtab
 
 " 'ruler'
-highlight OverLength ctermbg=red ctermfg=white
-match OverLength /\%101v.\+/
+set colorcolumn=100
 
 " wildmenu
 set wildmenu
