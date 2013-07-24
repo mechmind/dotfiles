@@ -18,6 +18,7 @@ set expandtab
 
 " 'ruler'
 set colorcolumn=100
+hi ColorColumn ctermbg=0
 
 " wildmenu
 set wildmenu
