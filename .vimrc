@@ -26,6 +26,9 @@ hi ColorColumn ctermbg=0
 set wildmenu
 set wildmode=longest:full
 
+" backspace
+set backspace=indent,eol,start
+
 " tabs
 map <F9> :tabprev<CR>
 map <F10> :tabnext<CR>
