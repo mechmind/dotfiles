@@ -2,7 +2,9 @@ syntax on
 filetype plugin on
 filetype indent on
 
+" colors
 highlight lCursor guifg=NONE guibg=Cyan
+highlight Visual ctermbg=0
 colorscheme peachpuff
 
 " russian input on C-^
