@@ -4,8 +4,8 @@ filetype indent on
 
 " colors
 highlight lCursor guifg=NONE guibg=Cyan
-highlight Visual ctermbg=0
 colorscheme peachpuff
+highlight Visual ctermbg=0
 
 " russian input on C-^
 set keymap=russian-jcukenwin
