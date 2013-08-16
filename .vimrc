@@ -1,3 +1,4 @@
+" coloring
 syntax on
 filetype plugin on
 filetype indent on
@@ -35,6 +36,9 @@ map <F10> :tabnext<CR>
 imap <F9> <C-C>:tabprev<CR>
 imap <F10> <C-C>:tabnext<CR>
 
+" swap files placement
+set directory=~/.vim/swaps//,/tmp
+
 " pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
@@ -42,7 +46,7 @@ execute pathogen#infect()
 " completion settings
 set completeopt+=longest
 set completeopt-=preview
-
+" omnifunc on tab
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " python-mode settings
