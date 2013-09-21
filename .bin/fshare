@@ -1,0 +1,105 @@
+#!/bin/bash
+
+SERVER=files.mechmind.net
+ROOT=/srv/http/files
+SHARE_ROOT="http://files.mechmind.net"
+
+upload() {
+    local_file="$1"
+    remote_dir="$2"
+
+    ssh $SERVER mkdir -p "$remote_dir" || return 1
+    scp -q "$local_file" $SERVER:"$remote_dir" || return 2
+}
+
+usage() {
+    cat <<EOF
+$0, file uploader
+Usage:
+    $0 [-p] [-r root] file [remote_subdir]
+    $0 -h
+
+Arguments:
+    file            - local file to be uploaded
+    remote_subdir   - remote subdir to place file in
+
+Options:
+    -h      - show this help
+    -p      - upload in private folder
+    -r      - set url root
+EOF
+}
+
+# read flags
+
+flag_usage=0
+flag_private=0
+
+while getopts hpr: opt; do
+    case $opt in
+        p)
+            flag_private=1
+            ;;
+        h)
+            flag_usage=1
+            ;;
+        r)
+            SHARE_ROOT=$OPTARG
+            ;;
+        *)
+            echo "unknown option"
+            exit 1
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [[ $flag_usage == 1 ]] ; then
+    usage
+    exit 0
+fi
+
+# read args
+
+local_path=""
+remote_subdir=""
+
+if [[ $# == 1 ]] ; then
+    local_path="$1"
+elif [[ $# == 2 ]] ; then
+    local_path="$1"
+    remote_subdir="$2"
+else
+    echo "invalid number of arguments"
+    exit 2
+fi
+
+
+if ! [ -f "$local_path" ] ; then
+    echo "no such file: '$local_path'"
+    exit 2
+fi
+
+if ! [ -r "$local_path" ] ; then
+    echo "file is unreadable"
+    exit 2
+fi
+
+
+# make private path
+if [[ $flag_private == 1 ]] ; then
+    hashsum=$(sha256sum $local_path | cut -d ' ' -f 1)
+    if [ -z "$remote_subdir" ] ; then
+        remote_subdir="p/$hashsum"
+    else
+        remote_subdir="p/$remote_subdir/$hashsum"
+    fi
+fi
+
+# upload file and show its url
+remote_dir="$ROOT/$remote_subdir"
+
+upload "$local_path" "$remote_dir"
+
+url=$SHARE_ROOT/$remote_subdir/$(basename $local_path)
+echo $url
