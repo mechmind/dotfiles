@@ -5,6 +5,7 @@
 !/.gitignore
 !/.tmux.conf
 !/.vim
+!/.bin
 /.vim/.VimballRecord
 /.vim/.netrwhist
 /.vim/swaps

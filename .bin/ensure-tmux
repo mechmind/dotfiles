@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. ~/.bashrc_local
+
+if tmux ls > /dev/null 2>&1 ; then
+	tmux attach
+else
+	tmux new -s main
+fi
+
