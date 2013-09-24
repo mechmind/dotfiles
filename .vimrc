@@ -61,3 +61,8 @@ set sessionoptions=buffers,curdir,folds,tabpages
 
 " markdown settings
 autocmd FileType markdown set textwidth=80
+
+" tagbar settings
+map <F8> :TagbarToggle<CR>
+source ~/.vim/tagbar.vimrc
+
