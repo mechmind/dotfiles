@@ -7,6 +7,7 @@ if ! xdotool search --classname urxvt-scratchpad ; then
     # currently geometry partially lost when window is moved into scratchpad
     i3-msg '[instance="urxvt-scratchpad"] move to scratchpad'
     i3-msg '[instance="urxvt-scratchpad"] scratchpad show'
+    sleep 0.1
     xdotool search --classname urxvt-scratchpad windowsize 100% 74%
     xdotool search --classname urxvt-scratchpad windowmove 0 0
     i3-msg '[instance="urxvt-scratchpad"] scratchpad show'
