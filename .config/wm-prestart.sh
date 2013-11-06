@@ -17,8 +17,8 @@ xbindkeys		## daemon for key rebinding (TODO: can be rewritten by awesome keybin
 xrdb -merge ~/.Xresources
 
 # Set up dual mon's
-if xrandr | grep -q DVI-0 ; then
-    xrandr --output DVI-0 --right-of VGA-0
+if xrandr | grep -q DVI-I-1 ; then
+    xrandr --output DVI-I-1 --right-of VGA-1
 fi
 
 # Set up agents
