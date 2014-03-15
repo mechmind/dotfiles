@@ -62,6 +62,9 @@ set sessionoptions=buffers,curdir,folds,tabpages
 " markdown settings
 autocmd FileType markdown set textwidth=80
 
+" noexpandtab for go sources (compatibility with go fmt)
+autocmd FileType go set noexpandtab
+
 " tagbar settings
 map <F8> :TagbarToggle<CR>
 source ~/.vim/tagbar.vimrc
