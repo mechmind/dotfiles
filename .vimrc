@@ -53,9 +53,6 @@ let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 let g:pymode_lint_write = 0
 let g:pymode_folding = 0
 
-" nerdtree settings
-map <C-m> :NERDTreeToggle<CR>
-
 " session control
 set sessionoptions=buffers,curdir,folds,tabpages
 
@@ -64,8 +61,4 @@ autocmd FileType markdown set textwidth=80
 
 " noexpandtab for go sources (compatibility with go fmt)
 autocmd FileType go set noexpandtab
-
-" tagbar settings
-map <F8> :TagbarToggle<CR>
-source ~/.vim/tagbar.vimrc
 
