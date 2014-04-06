@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd ~/music || cd ~/stuff/music
+
+dir="`find * -type d | dmenu -i -p 'music dir:'`"
+
+if ! [ -z "$dir" ] ; then
+    mpc add "$dir"
+fi
