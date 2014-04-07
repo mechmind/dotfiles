@@ -56,6 +56,9 @@ let g:pymode_folding = 0
 " session control
 set sessionoptions=buffers,curdir,folds,tabpages
 
+" go settings
+autocmd FileType go setlocal noexpandtab
+
 " markdown settings
 autocmd FileType markdown set textwidth=80
 
