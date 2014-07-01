@@ -2,7 +2,7 @@
 
 cd ~/music || cd ~/stuff/music
 
-dir="`find * -type d | dmenu -i -p 'music dir:'`"
+dir="`find * -type d | dmenu -i -l 15 -p 'music dir:'`"
 
 if ! [ -z "$dir" ] ; then
     mpc add "$dir"
