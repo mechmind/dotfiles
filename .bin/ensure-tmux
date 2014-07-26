@@ -1,10 +1,12 @@
 #!/bin/bash
 
+SUFFIX=$1
+
 . ~/.bashrc_local
 
-if tmux ls > /dev/null 2>&1 ; then
+if tmux -L default$SUFFIX ls  > /dev/null 2>&1 ; then
 	tmux attach
 else
-	tmux new -s main
+	tmux -L default$SUFFIX new -s main
 fi
 
