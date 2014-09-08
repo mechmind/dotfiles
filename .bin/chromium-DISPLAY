@@ -1,0 +1,3 @@
+#!/bin/sh
+
+chromium --user-data-dir=$HOME/.config/chromium$DISPLAY "$@"
