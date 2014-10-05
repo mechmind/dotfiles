@@ -21,3 +21,8 @@
 !/.config/dunst
 !/.config/wallpaper.jpg
 !/.config/mimeo.conf
+
+!/.ncmpcpp
+/.ncmpcpp/*
+!/.ncmpcpp/bindings
+!/.ncmpcpp/config
