@@ -5,7 +5,7 @@ SUFFIX=$1
 . ~/.bashrc_local
 
 if tmux -L default$SUFFIX ls  > /dev/null 2>&1 ; then
-	tmux attach
+	tmux -L default$SUFFIX attach
 else
 	tmux -L default$SUFFIX new -s main
 fi
