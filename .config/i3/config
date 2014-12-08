@@ -192,5 +192,5 @@ bindsym $mod+Up exec amixer -c 0 set Master 4+ unmute
 bindsym Control+Mod1+l exec slock
 
 # second monitor workspaces
-workspace q output DVI-1
-workspace w output DVI-1
+workspace q output DP3
+workspace w output DP3

@@ -17,9 +17,9 @@ xbindkeys		## daemon for key rebinding (TODO: can be rewritten by awesome keybin
 xrdb -merge ~/.Xresources
 
 # Set up dual mon's
-#if xrandr | grep -q DVI-1 ; then
-#    xrandr --output DVI-0 --left-of DVI-1
-#fi
+if xrandr | grep -q DP3 ; then
+    xrandr --output DP3 --right-of DP2
+fi
 
 # Set up wallpaper
 feh --no-fehbg --bg-scale ~/.config/wallpaper.jpg
