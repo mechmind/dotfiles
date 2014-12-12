@@ -20,7 +20,7 @@ set shiftwidth=4
 set expandtab
 
 " 'ruler'
-set colorcolumn=100
+set colorcolumn=100,120
 hi ColorColumn ctermbg=0
 
 " wildmenu
@@ -50,7 +50,7 @@ set completeopt-=preview
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " python-mode settings
-let g:pymode_lint_write = 0
+let g:pymode_lint_on_write = 0
 let g:pymode_folding = 0
 
 " session control
