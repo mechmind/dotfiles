@@ -58,6 +58,8 @@ set sessionoptions=buffers,curdir,folds,tabpages
 
 " go settings
 autocmd FileType go setlocal noexpandtab
+" vim-go customization
+command! -nargs=1 -complete=customlist,go#package#Complete Import call go#import#SwitchImport(1, '', <f-args>)
 
 " markdown settings
 autocmd FileType markdown set textwidth=80
