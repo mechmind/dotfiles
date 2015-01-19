@@ -18,7 +18,8 @@ xrdb -merge ~/.Xresources
 
 # Set up dual mon's
 if xrandr | grep -q DP3 ; then
-    xrandr --output DP3 --right-of DP2
+    xrandr --output DP2 --auto
+    xrandr --output DP3 --auto --right-of DP2
 fi
 
 # Set up wallpaper
