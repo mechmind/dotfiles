@@ -2,7 +2,9 @@
 
 if ! xdotool search --classname urxvt-scratchpad ; then
     urxvt -name urxvt-scratchpad -e ensure-tmux $DISPLAY &>/dev/null &
-    sleep 0.1
+    while ! xdotool search --classname urxvt-scratchpad ; do
+        sleep 0.05
+    done
     # hack for preserving scratchpad geometry.
     # currently geometry partially lost when window is moved into scratchpad
     i3-msg '[instance="urxvt-scratchpad"] move to scratchpad'
