@@ -4,6 +4,7 @@
 
 # dont save duplicates in history, dont save cmds, starting with space
 export HISTCONTROL=ignorespace:ignoredups
+export HISTIGNORE=fg
 
 test -r ~/.bashrc_local && source ~/.bashrc_local
 
