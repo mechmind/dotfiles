@@ -49,6 +49,11 @@ set completeopt-=preview
 " omnifunc on tab
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
+" airline settings
+let g:airline_powerline_fonts = 1
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+
 " python-mode settings
 let g:pymode_lint_on_write = 0
 let g:pymode_folding = 0
