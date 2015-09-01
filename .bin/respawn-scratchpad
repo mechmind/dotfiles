@@ -10,8 +10,14 @@ if ! xdotool search --classname urxvt-scratchpad ; then
     i3-msg '[instance="urxvt-scratchpad"] move to scratchpad'
     i3-msg '[instance="urxvt-scratchpad"] scratchpad show'
     sleep 0.1
-    #xdotool search --classname urxvt-scratchpad windowsize 100% 74%
-    xdotool search --classname urxvt-scratchpad windowsize 50% 74%
+
+    # detect multihead
+    width_percent=100
+    if [ "`xrandr | awk '$2 == "connected"' | wc -l`" -gt 1 ] ; then
+        width_percent=50
+    fi
+
+    xdotool search --classname urxvt-scratchpad windowsize ${width_percent}% 74%
     xdotool search --classname urxvt-scratchpad windowmove 0 0
     i3-msg '[instance="urxvt-scratchpad"] scratchpad show'
 fi
