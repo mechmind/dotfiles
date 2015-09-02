@@ -14,5 +14,7 @@ PS1='[\u@\[\e[0;'$PS1_hostcolor'm\]\h\[\e[0m\] \w]\$ '
 export PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007\a" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
 export EDITOR=vim
 
+test -r "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh" && source "$HOME/.vim/bundle/gruvbox/gruvbox_256palette.sh"
+
 test -r ~/.bash_functions && source ~/.bash_functions
 
