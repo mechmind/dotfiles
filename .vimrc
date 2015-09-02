@@ -1,3 +1,5 @@
+set nocompatible
+
 " coloring
 syntax on
 filetype plugin on
@@ -64,7 +66,7 @@ set sessionoptions=buffers,curdir,folds,tabpages
 " go settings
 autocmd FileType go setlocal noexpandtab
 " vim-go customization
-command! -nargs=1 -complete=customlist,go#package#Complete Import call go#import#SwitchImport(1, '', <f-args>)
+command! -nargs=1 -complete=customlist,go#package#Complete Import call go#import#SwitchImport(1, '', <f-args>, '<bang>')
 
 " markdown settings
 autocmd FileType markdown set textwidth=80
@@ -72,3 +74,15 @@ autocmd FileType markdown set textwidth=80
 " noexpandtab for go sources (compatibility with go fmt)
 autocmd FileType go set noexpandtab
 
+
+""" mappings
+
+let mapleader = " "
+
+" go mappings
+autocmd FileType go nmap <leader>b <Plug>(go-build)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>c <Plug>(go-coverage)
+
+" omnicomplete on TAB
+inoremap <TAB> <C-R>=(pumvisible() ? feedkeys("\<lt>C-N>") : feedkeys("\<lt>C-X>\<lt>C-O>")) ? '' : '' <CR>
