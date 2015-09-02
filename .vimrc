@@ -1,14 +1,9 @@
 set nocompatible
 
-" coloring
+" basic
 syntax on
 filetype plugin on
 filetype indent on
-
-" colors
-highlight lCursor guifg=NONE guibg=Cyan
-colorscheme peachpuff
-highlight Visual ctermbg=0
 
 " russian input on C-^
 set keymap=russian-jcukenwin
@@ -76,6 +71,13 @@ autocmd FileType markdown set textwidth=80
 
 " noexpandtab for go sources (compatibility with go fmt)
 autocmd FileType go set noexpandtab
+
+" colors
+highlight lCursor guifg=NONE guibg=Cyan
+highlight Visual ctermbg=0
+set background=dark
+let g:gruvbox_contrast="hard"
+colorscheme gruvbox
 
 
 """ mappings
