@@ -45,6 +45,9 @@ set directory=~/.vim/swaps//,/tmp
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
+" my small functions
+source ~/.vim/functions.vim
+
 " completion settings
 set completeopt+=longest
 set completeopt-=preview
@@ -85,4 +88,4 @@ autocmd FileType go nmap <leader>t <Plug>(go-test)
 autocmd FileType go nmap <leader>c <Plug>(go-coverage)
 
 " omnicomplete on TAB
-inoremap <TAB> <C-R>=(pumvisible() ? feedkeys("\<lt>C-N>") : feedkeys("\<lt>C-X>\<lt>C-O>")) ? '' : '' <CR>
+inoremap <TAB> <C-R>=SimpleTab()<CR>
