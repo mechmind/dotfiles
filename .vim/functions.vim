@@ -7,7 +7,7 @@ function! SimpleTab()
         return ''
     endif
 
-    let pre = line[:cursorAt]
+    let pre = line[:cursorAt-2]
     if pre =~ '\s$'
         return "\<TAB>"
     endif

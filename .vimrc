@@ -65,16 +65,15 @@ set sessionoptions=buffers,curdir,folds,tabpages
 autocmd FileType go setlocal noexpandtab
 " vim-go customization
 command! -nargs=1 -complete=customlist,go#package#Complete Import call go#import#SwitchImport(1, '', <f-args>, '<bang>')
+" noexpandtab for go sources (compatibility with go fmt)
+autocmd FileType go set noexpandtab
+" highlight operators
+let g:go_highlight_operators=1
 
 " markdown settings
 autocmd FileType markdown set textwidth=80
 
-" noexpandtab for go sources (compatibility with go fmt)
-autocmd FileType go set noexpandtab
-
 " colors
-highlight lCursor guifg=NONE guibg=Cyan
-highlight Visual ctermbg=0
 set background=dark
 let g:gruvbox_contrast="hard"
 colorscheme gruvbox
@@ -87,7 +86,12 @@ let mapleader = " "
 " go mappings
 autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>T <Plug>(go-test-func)
 autocmd FileType go nmap <leader>c <Plug>(go-coverage)
+
+" quickfix shortcuts
+nnoremap <leader>n :cnext<CR>
+nnoremap <leader>p :cprev<CR>
 
 " omnicomplete on TAB
 inoremap <TAB> <C-R>=SimpleTab()<CR>
