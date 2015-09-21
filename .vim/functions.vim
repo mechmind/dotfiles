@@ -7,17 +7,17 @@ function! SimpleTab()
         return ''
     endif
 
+    if pumvisible()
+        return "\<C-N>"
+    endif
+
     let pre = line[:cursorAt-2]
     if pre =~ '\s$'
         return "\<TAB>"
     endif
 
     " invoke completion
-    if pumvisible()
-        return "\<C-N>"
-    else
-        return "\<C-X>\<C-O>"
-    endif
+    return "\<C-X>\<C-O>"
 
     return ''
 endfunction

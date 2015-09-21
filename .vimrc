@@ -88,6 +88,8 @@ autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
 autocmd FileType go nmap <leader>T <Plug>(go-test-func)
 autocmd FileType go nmap <leader>c <Plug>(go-coverage)
+autocmd FileType go nmap <leader>r <Plug>(go-info)
+autocmd FileType go nmap <leader>d :GoDef<space>
 
 " quickfix shortcuts
 nnoremap <leader>n :cnext<CR>
