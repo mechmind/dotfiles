@@ -20,18 +20,15 @@ set expandtab
 set colorcolumn=100,120
 hi ColorColumn ctermbg=0
 
+" allow hidden modified buffers
+set hidden
+
 " wildmenu
 set wildmenu
 set wildmode=longest:full
 
 " backspace
 set backspace=indent,eol,start
-
-" tabs
-map <F9> :tabprev<CR>
-map <F10> :tabnext<CR>
-imap <F9> <C-C>:tabprev<CR>
-imap <F10> <C-C>:tabnext<CR>
 
 " swap files placement
 set directory=~/.vim/swaps//,/tmp
@@ -97,3 +94,14 @@ nnoremap <leader>p :cprev<CR>
 
 " omnicomplete on TAB
 inoremap <TAB> <C-R>=SimpleTab()<CR>
+
+" buffers
+map <F9> :bprev<CR>
+map <F10> :bnext<CR>
+imap <F9> <C-C>:bprev<CR>
+imap <F10> <C-C>:bnext<CR>
+
+" fast edit and quit
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :bd<CR>
+
