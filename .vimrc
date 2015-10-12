@@ -100,6 +100,7 @@ map <F9> :bprev<CR>
 map <F10> :bnext<CR>
 imap <F9> <C-C>:bprev<CR>
 imap <F10> <C-C>:bnext<CR>
+nnoremap gb :bnext<CR>
 
 " fast edit and quit
 nnoremap <leader>w :w<CR>
