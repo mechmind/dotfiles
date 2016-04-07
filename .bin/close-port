@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function usage {
+    echo "usage: $0 (tcp|udp) port - close specified port"
+}
+
+proto="$1"
+port="$2"
+
+if [ -z "$proto" ] || [ -z "$port" ]; then
+    usage
+    exit 1
+fi
+
+if [ "$proto" != "tcp" ] && [ "$proto" != "udp" ]; then
+    usage
+    exit 1
+fi
+
+port=`grep -oE '[0-9]*' <<<"$port"`
+
+if iptables -t filter -C open_tcp_ports -m $proto -p $proto --dport $port -j ACCEPT ; then
+    iptables -t filter -D open_tcp_ports -m $proto -p $proto --dport $port -j ACCEPT 
+fi
