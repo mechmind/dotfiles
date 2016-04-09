@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for i in "$@" ; do
+    through-vpn "$i" && echo "$i" >> /etc/through-vpn.conf
+done

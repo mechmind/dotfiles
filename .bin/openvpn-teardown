@@ -1,0 +1,9 @@
+#!/bin/bash
+
+config_file=/etc/through-vpn.conf
+
+test -e $config_file || exit 0
+
+for host in `cat $config_file` ; do
+    through-vpn -d $host
+done

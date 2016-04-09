@@ -1,0 +1,137 @@
+#!/bin/bash
+
+VPN_DEVICE=tun0
+
+function usage {
+    echo "usage: $0 host -- route traffic to host through vpn" 
+    echo "       $0 -d host -- remove vpn routing for host"
+}
+
+function get-local-vpn-ip {
+    ip address show dev $VPN_DEVICE | grep inet | awk '{print $2}' | cut -d / -f 1
+}
+
+function get-remote-vpn-ip {
+    ip address show dev $VPN_DEVICE | grep inet | awk '{print $4}' | cut -d / -f 1
+}
+
+function is-vpn-up {
+    ip link show dev $VPN_DEVICE | grep -q UP
+}
+
+function lookup-through-vpn {
+    addr="$1"
+    dig +short "$addr" @`get-remote-vpn-ip`
+}
+
+function route-through-vpn {
+    addr="$1"
+    ip route add to "$addr/32" via `get-remote-vpn-ip`
+}
+
+function unroute-through-vpn {
+    addr="$1"
+    ip route del to "$addr/32" via `get-remote-vpn-ip`
+}
+
+function add-to-hosts {
+    ip="$1"
+    name="$2"
+
+    awk -v ip=$ip -v name=$name -f- /etc/hosts > /etc/hosts.tmp <<EOF
+    BEGIN { found=0 }
+    \$1 == ip {
+        found=1;
+        locfound=0;
+        for (i=2; i<=NF; i++) {
+            if (\$i == name)
+                locfound=1
+        }
+        if (!locfound)
+            \$(NF+1)=name
+    }
+    {print}
+    END {
+        if (!found)
+            print ip, name;
+    }
+EOF
+
+    mv /etc/hosts.tmp /etc/hosts
+}
+
+function remove-from-hosts {
+    name="$1"
+
+    awk -v name=$name -f- /etc/hosts > /tmp/hosts.tmp <<EOF
+    {
+        if (NF > 1) {
+            for (i=2; i<=NF; i++) {
+                if (\$i == name)
+                    \$i = "";
+            }
+        }
+    }
+    {print}
+EOF
+    
+    grep -Pv '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\s*$' /tmp/hosts.tmp > /etc/hosts
+    rm /tmp/hosts.tmp
+}
+
+function add-path {
+    if ! is-vpn-up; then
+        die 2 "vpn is not currently online"
+    fi
+
+    ip=`lookup-through-vpn "$host" | head -1 `
+    if [ -z "$ip" ]; then
+        die 2 "no ip found for host $host";
+    fi
+
+    route-through-vpn "$ip" || die 3 "cannot route through vpn"
+    add-to-hosts "$ip" "$host" || die 3 "cannot add record to hosts"
+}
+
+function remove-path {
+    host="$1"
+
+    remove-from-hosts $host || die 3 "cannot remove host from hosts file"
+
+    if is-vpn-up; then
+        ip=`lookup-through-vpn "$host" | head -1 `
+        unroute-through-vpn $ip
+    fi
+}
+
+function die {
+    code="$1"
+    reason="$2"
+    echo "$reason"
+    exit "$code"
+}
+
+function main {
+    if [ -z "$1" ]; then
+        usage
+        exit 1
+    fi
+
+    action=add-path
+    if [ "$1" == "-d" ] ; then
+        action=remove-path
+        shift
+    fi
+
+    host=`grep -P '^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$' <<<"$1"`
+
+    if [ -z "$host" ]; then
+        usage
+        exit 1
+    fi
+
+    $action "$host"
+}
+
+main "$@"
+
