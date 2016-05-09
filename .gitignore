@@ -1,26 +1,12 @@
-/*
-!/.gitignore_global
-!/.bashrc
-!/.bash_functions
-!/.gitignore
-!/.tmux.conf
-!/.vim
-!/.bin
-!/.fonts
 /.vim/.VimballRecord
 /.vim/.netrwhist
 /.vim/swaps
-!/.vimrc
-!/.xbindkeysrc
-!/.xinitrc
-!/.Xresources
 !/.config
 /.config/*
 !/.config/awesome/
 !/.config/i3
 !/.config/i3status
 !/.config/dunst
-!/.config/wallpaper.jpg
 !/.config/mimeo.conf
 
 !/.ncmpcpp
