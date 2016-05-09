@@ -2,7 +2,7 @@
 Xft.rgba: rgb
 Xft.hinting: true
 Xft.hintstyle: hintfull
-Xft.lcdfilter:  lcddefault
+Xft.lcdfilter: lcddefault
 
 URxvt.scrollBar: false
 URxvt.perl-ext-common: default,vtwheel
