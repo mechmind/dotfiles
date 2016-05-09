@@ -51,6 +51,7 @@ work     xf86-video-intel
 -        xdotool
 -        feh
 -        dunst
+-        xclip
 
 # register local fonts
 -        $ fc-cache -f ~/.fonts
