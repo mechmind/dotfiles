@@ -1,0 +1,199 @@
+#!/usr/bin/env ruby
+
+# borrowed from https://github.com/seletskiy/dotfiles
+
+AUR_URL = "https://aur.archlinux.org/packages/"
+
+def main(requested_profile)
+    if ENV['DOTFILES_PROFILE'] && !requested_profile
+        requested_profile = ENV['DOTFILES_PROFILE']
+        requested_force = 0
+    else
+        requested_force = 1
+    end
+
+    if !requested_profile
+        puts("Usage: #{$0} [<profile>] [force]")
+        exit
+    end
+
+    ENV['DOTFILES_PROFILE'] = requested_profile
+
+    if STDIN.tty?
+        input = open('profiles.txt', 'r')
+    else
+        input = STDIN
+    end
+
+    input.each_line() {|line|
+        line = line.strip()
+        if line =~ /^\s*($|#)/
+            next
+        end
+
+        profile, force, action = parse_line(line)
+        if !action
+            puts "invalid spec: #{line}"
+            next
+        end
+
+        if profile != '-' && profile != requested_profile
+            next
+        end
+
+        if force > requested_force
+            next
+        end
+
+        result = true
+        case action
+        when /^\$/
+            result = run_command(action.sub(/^\$\s*/, ''), requested_force)
+        when /^https:\/\/aur./
+            result = install_aur(action, requested_force)
+        else
+            result = install_pkg(action, requested_force)
+        end
+
+        if !result
+            exit 1
+        end
+    }
+end
+
+def ensure_deps(name, force)
+    if !install_pkg(name, false)
+        return install_aur(name, false)
+    else
+        return true
+    end
+end
+
+def parse_line(line)
+    profile, action = line.split(/\s+/, 2)
+    if !action
+        return nil, nil, nil
+    end
+
+    force = action[/^!*/].length
+    return profile, force, action[force..-1].strip()
+end
+
+def run_command(cmd, force)
+    puts("\x1b[1;34mCMD\x1b[0m #{cmd}")
+    `#{cmd} >&2`
+    if $?.to_i > 0
+        return false
+    else
+        return true
+    end
+end
+
+def install_aur(url, force, flags='')
+    last_pwd = Dir.pwd
+    Dir.chdir('/')
+
+    begin
+        if !url[/^https?:/]
+            url = AUR_URL + url
+        end
+
+        pkgname = url.sub(/.*\/([^\/]+)\/?$/, '\1')
+        tarurl = url.sub(/\/packages\/([^\/]*)\/?$/, '/cgit/aur.git/snapshot/\1.tar.gz')
+
+        print("\x1b[1;32mAUR\x1b[0m #{pkgname} #{flags}")
+
+        `pacman -Qqs #{pkgname}`
+        if $?.to_i == 0 && force <= 0
+            puts
+            return true
+        end
+
+        installed_version = `pacman -Qi #{pkgname} 2>&1 | awk '/Version/{print $3}'`
+        installed_version.strip!()
+
+        print("\r\x1b[1;31mAUR\x1b[0m #{pkgname} #{flags}\n")
+
+        tempdir = `mktemp -d`.strip()
+        `cd #{tempdir} && curl -L #{tarurl} | tar xz >&2`
+        Dir.chdir(tempdir + '/' + pkgname)
+
+        for dep in `source ./PKGBUILD && xargs -n1 <<< $depends`.split("\n")
+            puts("\x1b[1;34m\x1b[39mDEP\x1b[0m " + dep)
+            if !ensure_deps(dep, force)
+                return false
+            end
+        end
+        Dir.chdir(tempdir + '/' + pkgname)
+
+        if `source ./PKGBUILD && type pkgver 2>&1`[/is a function/]
+            puts("\x1b[1;36m!!! \x1b[39mPackage version is dynamic")
+            `makepkg --skippgpcheck -do >&2`
+            pkgver = `source ./PKGBUILD && pkgver`.strip()
+        else
+            pkgver = `source ./PKGBUILD && echo $pkgver`.strip()
+            pkgrel = `source ./PKGBUILD && echo $pkgrel`.strip()
+            if pkgrel != ""
+                pkgver = pkgver + "-" + pkgrel
+            end
+        end
+
+        result = true
+        keep_pkgbuild = false
+        if installed_version != pkgver || force > 0
+            `yes | makepkg -rsi --force #{flags} >&2`
+            if $?.to_i > 0
+                result = false
+
+                puts "failed to install package"
+                output = `yes | makepkg -rsi --force #{flags} 2>&1`
+                if output[/PGP signatures could not be verified/]
+                    reesult = install_aur(url, force, '--skippgpcheck')
+                end
+                keep_pkgbuild = true
+            end
+        end
+
+        if keep_pkgbuild
+            puts("\x1b[1;34m\x1b[39mPKGBUILD -> \x1b[0m" + tempdir)
+        else
+            `rm -rf #{tempdir}`
+        end
+
+        return result
+    ensure
+        Dir.chdir(last_pwd)
+    end
+end
+
+def install_pkg(pkgname, force)
+    last_pwd = Dir.pwd
+    Dir.chdir('/')
+
+    begin
+        print("\x1b[1;32mPKG\x1b[0m #{pkgname}")
+
+        `pacman -Qs '^#{pkgname}$'`
+        if $?.to_i == 0
+            `pacman -Qu #{pkgname}`
+            if $?.to_i > 0
+                puts
+                return true
+            end
+        end
+
+        print("\r\x1b[1;31mPKG\x1b[0m #{pkgname}\n")
+
+        `yes | sudo pacman -S #{pkgname} --noconfirm >&2`
+        if $?.to_i > 0
+            puts "failed to install package"
+            return false
+        end
+
+        return true
+    ensure
+        Dir.chdir(last_pwd)
+    end
+end
+
+main(ARGV[0])

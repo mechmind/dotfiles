@@ -1,0 +1,268 @@
+#!/usr/bin/env ruby
+
+# borrowed from https://github.com/seletskiy/dotfiles
+
+require 'fileutils'
+require 'tempfile'
+
+def main(action, profile)
+    if action == nil
+        puts("Usage: #{$0} install [<profile>] | rejoin")
+        exit
+    end
+
+    if ENV['DOTFILES_PROFILE'] && !profile
+        profile = ENV['DOTFILES_PROFILE']
+    end
+
+    if !profile
+        puts("<profile> should be specified")
+        exit
+    end
+
+    ENV['DOTFILES_PROFILE'] = profile
+
+    placeholder_expanded = 'xxx'
+    placeholder_base = 'xxx'
+    `git ls-files`.split("\n").each() do |file_name|
+        target_dir = File.expand_path('~') + '/'
+        if file_name.start_with?('rootfs/')
+            target_dir = '/'
+        end
+
+        source_type = nil
+        case file_name
+        when /README/
+            # skip readme
+        when /^(dotfiles|bootstrap|profiles.txt)$/
+            # skip installation scripts
+        when /(.*)\.(\$.*$)/
+            placeholder_base = $1
+            placeholder_expanded = file_name.sub($2, profile)
+        when /^#{placeholder_expanded}$/
+            if placeholder_base[/[^\/]+.template$/]
+                source_type = :template
+                target_name = target_dir + placeholder_base.sub(
+                    /\.template$/, ''
+                )
+            else
+                source_type = :file
+                target_name = target_dir + placeholder_base
+            end
+        when /^#{placeholder_base}\./
+            # skip unneeded files
+        when /[^\/]+\.template$/
+            source_type = :template
+            target_name = target_dir + file_name.sub(/\.template$/, '')
+        else
+            source_type = :file
+            target_name = target_dir + file_name
+        end
+
+        if source_type
+            self.send(:"#{action}_#{source_type}", file_name, target_name)
+        end
+    end
+
+    if action == 'rejoin'
+        exec('git status -s')
+    end
+end
+
+def ensure_dir(file_name, sudo)
+    dir_name = File.dirname(file_name)
+    if sudo
+        `sudo mkdir -p #{dir_name}`
+    else
+        `mkdir -p #{dir_name}`
+    end
+end
+
+def remove_rootfs_prefix(source)
+    if source.start_with?('/rootfs')
+        return source[7..-1], true
+    else
+        return source, false
+    end
+end
+
+def install_file(source, destination)
+    destination, rootfs = remove_rootfs_prefix(destination)
+
+    # if source is actually a submodule (indistinguishable in git ls-files)
+    if File.exist?(source + "/.git")
+        if File.exist?(destination)
+            if File.realpath(source) == File.realpath(destination)
+                return
+            end
+        end
+    end
+
+    if File.exist?(destination) && FileUtils.identical?(source, destination)
+        return
+    end
+
+    ensure_dir(destination, rootfs)
+
+    if rootfs
+        puts("sudo cp: #{source} -> #{destination}")
+        `sudo cp -ruT '#{source}' #{destination}`
+    elsif File.dirname(destination).end_with?("/.config/systemd/user")
+        puts("hardlink: #{source} -> #{destination}")
+        `ln -Tf '#{File.realdirpath(source)}' #{destination}`
+    else
+        puts("symlink: #{source} -> #{destination}")
+        `ln -Tsf '#{File.realdirpath(source)}' #{destination}`
+    end
+end
+
+def rejoin_file(source, destination)
+    destination, _ = remove_rootfs_prefix(destination)
+
+    if File.directory?(destination)
+        return
+    end
+
+    if !File.exist?(destination) || FileUtils.identical?(source, destination)
+        return
+    end
+
+    `cp -p #{destination} #{source}`
+end
+
+def get_user_input(prompt, silent)
+    flag = silent ? 's' : ''
+    value = `read -e#{flag}p"#{prompt}" && echo -n $REPLY`
+    if silent
+        puts
+    end
+    return value
+end
+
+def filter_lines(lines, template)
+    return lines.select{|l| !l[/^#{template}$/]}
+end
+
+def diff_template(source, destination)
+    filtered_source = File.open(source).each_line().to_a
+    filtered_destination = File.open(destination).each_line().to_a
+
+    placeholders = {}
+
+    File.open(source).each_line() do |line|
+        line_contains_plaсeholders = false
+        pattern = line.split(/(?={{)|(?<=}})/).map.with_index{|part, index|
+            if part[/{{.*}}/]
+                line_contains_plaсeholders = true
+                part.sub(/{{(.*)}}/, '(?<\1>.*)')
+            else
+                Regexp.escape(part)
+            end
+        }.join()
+
+        if line_contains_plaсeholders
+            filtered_destination.each() {|line|
+                line.match(pattern) {|match|
+                    match.names.each{|placeholder_name|
+                        placeholders[
+                            "{{#{placeholder_name}}}"
+                        ] = match[placeholder_name]
+                    }
+                }
+            }
+
+            filtered_source = filter_lines(filtered_source, pattern)
+            filtered_destination = filter_lines(filtered_destination, pattern)
+        end
+    end
+
+    s = Tempfile.new('dotfiles')
+    d = Tempfile.new('dotfiles')
+    s.write(filtered_source.join(''))
+    d.write(filtered_destination.join(''))
+    s.close()
+    d.close()
+
+    patch = Tempfile.new('dotfiles_patch')
+
+    `diff -u #{s.path} #{d.path} > #{patch.path}`
+    s.unlink()
+    d.unlink()
+
+    if $?.to_i == 0
+        patch.unlink()
+        return nil, nil
+    end
+
+    return patch, placeholders
+end
+
+def rejoin_template(source, destination)
+    if !File.exist?(destination)
+        return
+    end
+
+    patch, _ = diff_template(source, destination)
+    if patch
+        `patch #{source} --no-backup-if-mismatch -sT < #{patch.path}`
+        patch.unlink()
+    end
+end
+
+def query_all_placeholders(line, cache)
+    while line =~ /({{.+?}})/
+        placeholder = $1
+
+        value = cache[placeholder]
+        if !value
+            value = get_user_input("#{placeholder}: ",
+                placeholder =~ /PASSWORD/)
+            cache[placeholder] = value
+        end
+
+        line = line.sub(placeholder, value)
+    end
+
+    return line
+end
+
+def install_template(source, destination)
+    destination, rootfs = remove_rootfs_prefix(destination)
+
+    ensure_dir(destination, rootfs)
+
+    placeholders = {}
+    if File.exist?(destination)
+        patch, placeholders = diff_template(source, destination)
+        if !patch
+            return
+        end
+
+        patch.unlink()
+    end
+
+    puts("generating: #{destination}")
+
+    expanded_lines = []
+    cache = {
+        '{{DOTFILES_PROFILE}}' => ENV['DOTFILES_PROFILE']
+    }.merge(placeholders)
+
+    File.open(source).each_line() do |line|
+        expanded_lines << query_all_placeholders(line, cache)
+    end
+
+    if rootfs
+        secure_destination = destination
+        destination = `mktemp`.strip()
+    end
+    File.open(destination, 'w') do |f|
+        f.puts(expanded_lines.join(""))
+    end
+    if rootfs
+        puts("sudo mv: #{destination} -> #{secure_destination}")
+        `sudo mv #{destination} #{secure_destination}`
+    end
+end
+
+main(ARGV[0], ARGV[1])

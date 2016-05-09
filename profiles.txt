@@ -1,0 +1,59 @@
+###
+### Packages and commands to bootstrap goes here.
+###
+### Few rules:
+###
+###     1) first column is a profile name ("-" for all profiles);
+###     2) second column is bootstrap specification:
+###        a) packages from official repo specified with theirs name;
+###        b) packages from aur specified with URL;
+###        c) packages from github specified with URL;
+###        d) command should be prefixed with $;
+###        e) if line begins with !, action will take place only if <profile> is
+###           explicitly specified on bootstrap script invokation;
+
+-        $ sudo pacman -Sy
+
+-        git
+-        $ pwd
+-        $ git submodule init
+-        $ git submodule update
+-        $ ./dotfiles install
+
+-      ! $ sudo locale-gen
+-      ! $ sudo localectl set-locale LANG=en_US.UTF-8
+
+-        ntp
+-      ! $ sudo timedatectl set-timezone Europe/Moscow
+-      ! $ sudo killall -0 ntpd || sudo ntpd -gq
+
+-        grub
+-      ! $ sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+-        vim
+-        xorg-server
+-        rxvt-unicode
+-        i3-wm
+-        i3status
+-        sudo
+-        bash-completion
+-        xdm-archlinux
+work     xf86-video-intel
+-        efibootmgr
+-        wpa_supplicant
+-        dialog
+-        firefox
+-        dmenu
+-        xorg-xset
+-        xorg-xinput
+-        openssh
+-        tmux
+-        xdotool
+-        feh
+-        dunst
+
+# register local fonts
+-        $ fc-cache -f ~/.fonts
+
+# fix fontconfig
+-        $ sudo ./bin-aux/fix-fontconfig
