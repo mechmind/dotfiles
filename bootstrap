@@ -171,8 +171,22 @@ def install_pkg(pkgname, force)
     Dir.chdir('/')
 
     begin
-        print("\x1b[1;32mPKG\x1b[0m #{pkgname}")
 
+        output = `pacman -Qg #{pkgname} 2>/dev/null`
+        if $?.to_i == 0
+            # it is a group
+            print("\x1b[1;35mGRP\x1b[0m #{pkgname}\n")
+            output.each_line() {|line|
+                pkg = line.split(' ')[1]
+                if not install_pkg(pkg, force)
+                    return false
+                end
+            }
+            print("\x1b[1;35mEND\x1b[0m #{pkgname}\n")
+            return true
+        end
+
+        print("\x1b[1;32mPKG\x1b[0m #{pkgname}")
         `pacman -Qs '^#{pkgname}$'`
         if $?.to_i == 0
             `pacman -Qu #{pkgname}`
