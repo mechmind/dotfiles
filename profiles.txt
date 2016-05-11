@@ -31,14 +31,16 @@
 -      ! $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 -        vim
+-        keychain
+-        alsa-utils
 -        xorg-server
+-        slock
 -        rxvt-unicode
 -        i3-wm
 -        i3status
 -        sudo
 -        bash-completion
 -        xdm-archlinux
-work     xf86-video-intel
 -        efibootmgr
 -        wpa_supplicant
 -        dialog
@@ -52,6 +54,26 @@ work     xf86-video-intel
 -        feh
 -        dunst
 -        xclip
+-        protobuf
+-        go
+-        openvpn
+-        docker
+-        base-devel
+-        gcc
+-        binutils
+-        pkg-config
+-        make
+#-        https://aur.archlinux.org/packages/kbdd-git
+
+-        https://aur.archlinux.org/packages/vacuum-im
+# build utils
+-        fakeroot
+
+# dev environment deps
+work     qt4
+work     virtualbox
+work     vagrant
+#work     https://aur.archlinux.org/packages/chef-dk
 
 # register local fonts
 -        $ fc-cache -f ~/.fonts

@@ -6,3 +6,5 @@ FONTS_CONF_AVAIL=/etc/fonts/conf.avail
 test -f $FONTS_CONF/10-hinting-slight.conf && rm $FONTS_CONF/10-hinting-slight.conf 
 test -f $FONTS_CONF/10-hinting-full.conf || \
        ln -s $FONTS_CONF_AVAIL/10-hinting-full.conf $FONTS_CONF/10-hinting-full.conf 
+test -f $FONTS_CONF/11-lcdfilter-default.conf || \
+       ln -s $FONTS_CONF_AVAIL/11-lcdfilter-default.conf $FONTS_CONF/11-lcdfilter-default.conf 
