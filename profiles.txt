@@ -31,6 +31,8 @@
 -      ! $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 -        vim
+-        jq
+-        protobuf
 -        keychain
 -        alsa-utils
 -        xorg-server
