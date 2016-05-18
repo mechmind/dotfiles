@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL="https://yandex.ru/images/today?size=1920x1080"
+URL="https://yandex.ru/images/today?size=1440x900"
 DEST=~/tmp/wallpaper.jpg
 
 if curl "$URL" > "$DEST" ; then

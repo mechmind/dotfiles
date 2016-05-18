@@ -8,11 +8,11 @@ function usage {
 }
 
 function get-local-vpn-ip {
-    ip address show dev $VPN_DEVICE | grep inet | awk '{print $2}' | cut -d / -f 1
+    ip address show dev $VPN_DEVICE | grep 'inet ' | awk '{print $2}' | cut -d / -f 1
 }
 
 function get-remote-vpn-ip {
-    ip address show dev $VPN_DEVICE | grep inet | awk '{print $4}' | cut -d / -f 1
+    ip address show dev $VPN_DEVICE | grep 'inet ' | awk '{print $4}' | cut -d / -f 1
 }
 
 function is-vpn-up {
@@ -90,6 +90,8 @@ function add-path {
     fi
 
     route-through-vpn "$ip" || die 3 "cannot route through vpn"
+    # remove hostname from hosts if it left for some reason
+    remove-from-hosts "$host"
     add-to-hosts "$ip" "$host" || die 3 "cannot add record to hosts"
 }
 

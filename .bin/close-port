@@ -19,6 +19,6 @@ fi
 
 port=`grep -oE '[0-9]*' <<<"$port"`
 
-if iptables -t filter -C open_tcp_ports -m $proto -p $proto --dport $port -j ACCEPT ; then
-    iptables -t filter -D open_tcp_ports -m $proto -p $proto --dport $port -j ACCEPT 
+if iptables -t filter -C open_${proto}_ports -m $proto -p $proto --dport $port -j ACCEPT &>/dev/null ; then
+    iptables -t filter -D open_${proto}_ports -m $proto -p $proto --dport $port -j ACCEPT 
 fi

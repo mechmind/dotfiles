@@ -1,0 +1,23 @@
+#!/bin/sh
+
+STREAM_KEY="live_70425346_Zy2rBauUVCLOfGeFHGmRUvjz5qBhry" 
+INRES="1440x900" # input resolution
+OUTRES="1440x900" # output resolution
+INRES="960x540" # input resolution
+OUTRES="640x360" # output resolution
+IN_OFFSET="+240,189"
+FPS="60" # target FPS
+GOP="120" # i-frame interval, should be double of FPS, 
+GOPMIN="60" # min i-frame interval, should be equal to fps, 
+THREADS="0" # max 6
+CBR="3000k" # constant bitrate (should be between 1000k - 3000k)
+QUALITY="fast"
+AUDIO_RATE="44100"
+SERVER="live-fra" # twitch server in frankfurt, see http://bashtech.net/twitch/ingest.php for list
+     
+rm -f ~/output.flv
+ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0$IN_OFFSET -f alsa -i hw:2,0 -f flv -ac 2 -ar $AUDIO_RATE \
+  -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p\
+  -s $OUTRES -preset $QUALITY -tune film -acodec libmp3lame -threads $THREADS -strict normal \
+  -bufsize $CBR "rtmp://$SERVER.twitch.tv/app/$STREAM_KEY"
+  #-bufsize $CBR ~/output.flv
