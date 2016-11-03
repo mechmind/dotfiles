@@ -6,11 +6,14 @@ xset r rate 250		## repeat rate
 xset b off		## dont bell on bell
 xset m 1.9		## mouse accleration
 
+# Set up fonts
+
+export FT2_SUBPIXEL_HINTING=0
 
 # Set up keyboard
 
 setxkbmap -option "grp:caps_toggle" us,ru	## switch layouts by caps lock
-kbdd			## daemon for per-window layouts
+#kbdd			## daemon for per-window layouts
 xbindkeys		## daemon for key rebinding
 
 # Set up Xresources

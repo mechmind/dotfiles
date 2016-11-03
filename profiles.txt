@@ -31,10 +31,16 @@
 -      ! $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 -        vim
+-        zip
+-        apvlv
+-        p7zip
 -        jq
+-        unzip
 -        protobuf
 -        keychain
+-        scrot
 -        alsa-utils
+-        dnsutils
 -        xorg-server
 -        slock
 -        rxvt-unicode
@@ -76,6 +82,10 @@ work     qt4
 work     virtualbox
 work     vagrant
 #work     https://aur.archlinux.org/packages/chef-dk
+work     samba
+work     mariadb-clients
+work     cups
+work     hplip
 
 # register local fonts
 -        $ fc-cache -f ~/.fonts
